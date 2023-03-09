@@ -1,3 +1,3 @@
-# application_blind_viewer
+Une application codée en Flutter par Pol Lamothe
 
-A new Flutter project.
+FLutter est un framework basé sur le language dart crée par Google
