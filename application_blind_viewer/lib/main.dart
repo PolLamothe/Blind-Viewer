@@ -1,9 +1,15 @@
 import 'package:application_blind_viewer/variable.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter_blue/flutter_blue.dart';
 
 void main() {
   runApp(MyApp());
+  BluetoothDevice device;
+
+  BluetoothState state;
+
+  BluetoothDeviceState deviceState;
 }
 
 class MyApp extends StatelessWidget {
@@ -19,10 +25,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MainApp extends StatefulWidget {
+  MainApp({super.key});
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    FlutterBlue.instance.state.listen((state) {
+      if (state == BluetoothState.off) {
+      } else if (state == BluetoothState.on) {
+        scanForDevices();
+      }
+    });
+  }
+
+  void scanForDevices() async {
+    var scanSubscription = bluetoothInstance.scan().listen((scanResult) async {
+      if (scanResult.device.name == "your_device_name") {
+        print("found device");
+//Assigning bluetooth device
+        var device = scanResult.device;
+//After that we stop the scanning for device
+        stopScanning();
+      }
+    });
+  }
+
+  void stopScanning() {
+    bluetoothInstance.stopScan();
+    scanSubscription.cancel();
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
@@ -39,20 +76,23 @@ class MainApp extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LearnPage()),
                 );
               },
-              child: const Text('Apprendre'),
+              // ignore: prefer_const_constructors
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  backgroundColor: const MaterialStatePropertyAll(Colors.red)),
+              child: const Text('Apprendre'),
             ),
           ),
           // ignore: prefer_const_constructors
           SizedBox(
             height: MediaQuery.of(context).size.height / 2,
             width: MediaQuery.of(context).size.width,
+            // ignore: prefer_const_constructors
             child: ElevatedButton(
               onPressed: null,
-              child: const Text('Tester ses connaissances'),
+              // ignore: prefer_const_constructors
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+                  backgroundColor: const MaterialStatePropertyAll(Colors.blue)),
+              child: const Text('Tester ses connaissances'),
             ),
           )
         ],
