@@ -1,9 +1,10 @@
 import pytesseract
-from picamera import PiCamera
+from picamera2
 import os
 import time
+import matplotlib
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 camera = PiCamera()
 
