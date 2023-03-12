@@ -1,5 +1,5 @@
 import pytesseract
-from picamera2
+import picamera2
 import os
 import time
 

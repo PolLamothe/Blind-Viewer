@@ -1,7 +1,13 @@
 import json
 import re
+import os
 
-with open("table.json", "r") as table_file:
+if(os.path.exists('table.json')): #possible bug avec VSCode qui ne detecte pas table.json avec son path normale
+    path = 'table.json'
+else:
+        path = './extract_text/table.json'
+
+with open(path, "r") as table_file:
     table = json.load(table_file)
 
 
