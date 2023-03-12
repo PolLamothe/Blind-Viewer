@@ -1,4 +1,4 @@
-Pour Lancer le script il faut installer tesseract et le mettre le fichier d'installation dans C:/program files
+Pour Lancer le script il faut installer tesseract
 
 lien installation tesseract:https://github.com/UB-Mannheim/tesseract/wiki (windows seulement)
 
