@@ -155,13 +155,13 @@
     0, 1,
     1, 1
   ],
-  "CAPITALE":
+  "C":
   [
     0, 0,
     0, 0,
     0, 1
   ],
-  "NOMBRE":
+  "N":
   [
     0, 1,
     0, 1,
@@ -371,13 +371,13 @@
     1, 1,
     1, 1
   ],
-  "BEFORE (le \" en début de mot)":
+  "B (le \" en début de mot)":
   [
     0, 0,
     1, 0,
     1, 1
   ],
-  "AFTER (le \" en fin de mot)":
+  "A (le \" en fin de mot)":
   [
     0, 0,
     1, 0,
