@@ -11,7 +11,7 @@ with open(path, "r") as table_file:
     table = json.load(table_file)
 
 
-def capital(match_obj):
+def capital(match_obj): #fonction qui sert a mettre la lettre majuscule en minuscule et a mettre C devant
     if match_obj.group(0) is not None:
         return str("C" + match_obj.group(0).lower())
 
@@ -25,13 +25,13 @@ def format_text(text: str) -> list:
     words = []
     for word in text.split(" "):
         word = re.sub(r"[A-Z]", capital, word)
-        word = re.sub(r"[0-9]", number, word)
+        #word = re.sub(r"[0-9]", number, word)
         words.append(word)
-    return words
+    return words #Retourne une Array avec Chaque mot dans des différentes 'Case' et dans un format compatible avec le table.json
 
 
-def convert_word(word:str) -> list:
+def convert_word(word:str) -> list: #on convertit le mot en une Array avec dans chaque 'Case' une de ses lettres
     binary = []
     for letter in word:
-        binary.append(table[letter])
+        binary.append(table[letter]) #Pour chaque lettre on la convertit en matrice braille et on l'ajoute dans une nouvelle 'case' de binary
     print(binary)
