@@ -33,7 +33,7 @@ def format_text(text: str) -> list:
             length = 0
             sentences.append(words.copy())
             words.clear()
-            if r"\n" in word:
+            if r"\n" in word: #si il y'a \n dans le mot alors on enlève \n
                 length = 0
                 raw_word = re.sub(r"\\n", "", word)
                 words.append(raw_word)
@@ -41,13 +41,13 @@ def format_text(text: str) -> list:
                 words.clear()
             else:
                 words.append(word)
-        elif r"\n" in word:
+        elif r"\n" in word: #si il y'a \n dans le mot alors on enlève \n
             length = 0
             raw_word = re.sub(r"\\n", "", word)
             words.append(raw_word)
             sentences.append(words.copy())
             words.clear()
-        else:
+        else: #si il n'y a pas de \n dans le mot on l'ajoute a words sans modification
             words.append(word)
     return sentences  # Retourne une Array avec Chaque mot dans des différentes 'Case' et dans un format compatible avec le table.json
 
