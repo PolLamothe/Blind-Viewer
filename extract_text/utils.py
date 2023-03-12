@@ -61,7 +61,7 @@ def convert_word(word: str) -> list:  # on convertit le mot en une liste avec da
     return binary
 
 
-def convert_sentence(sentence:list) -> list:
+def convert_sentence(sentence: list) -> list:
     new_sentence = []
     for word in sentence:
         new_sentence.append(convert_word(word))
