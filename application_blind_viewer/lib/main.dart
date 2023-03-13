@@ -43,21 +43,22 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+
   void scanForDevices() async {
-    var scanSubscription = bluetoothInstance.scan().listen((scanResult) async {
-      if (scanResult.device.name == "your_device_name") {
-        print("found device");
-//Assigning bluetooth device
-        var device = scanResult.device;
-//After that we stop the scanning for device
-        stopScanning();
+    // Start scanning
+    flutterBlue.startScan(timeout: Duration(seconds: 4));
+
+// Listen to scan results
+    var subscription = flutterBlue.scanResults.listen((results) {
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! rssi: ${r.rssi}');
       }
     });
-  }
 
-  void stopScanning() {
-    bluetoothInstance.stopScan();
-    scanSubscription.cancel();
+// Stop scanning
+    flutterBlue.stopScan();
   }
 
   Widget build(BuildContext context) {
