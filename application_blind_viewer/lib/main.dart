@@ -1,3 +1,4 @@
+// @dart=3
 import 'package:application_blind_viewer/variable.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -5,11 +6,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 void main() {
   runApp(MyApp());
-  BluetoothDevice device;
-
-  BluetoothState state;
-
-  BluetoothDeviceState deviceState;
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +15,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => MainApp(),
-        'LearnPage': (context) => LearnPage()
+        'LearnPage': (context) => LearnPage(),
+        'TestPage': (context) => TestPage()
       },
     );
   }
@@ -33,34 +30,6 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  void initState() {
-    super.initState();
-    FlutterBlue.instance.state.listen((state) {
-      if (state == BluetoothState.off) {
-      } else if (state == BluetoothState.on) {
-        scanForDevices();
-      }
-    });
-  }
-
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  void scanForDevices() async {
-    // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 4));
-
-// Listen to scan results
-    var subscription = flutterBlue.scanResults.listen((results) {
-      // do something with scan results
-      for (ScanResult r in results) {
-        print('${r.device.name} found! rssi: ${r.rssi}');
-      }
-    });
-
-// Stop scanning
-    flutterBlue.stopScan();
-  }
-
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
@@ -89,7 +58,12 @@ class _MainAppState extends State<MainApp> {
             width: MediaQuery.of(context).size.width,
             // ignore: prefer_const_constructors
             child: ElevatedButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestPage()),
+                );
+              },
               // ignore: prefer_const_constructors
               style: ButtonStyle(
                   backgroundColor: const MaterialStatePropertyAll(Colors.blue)),
@@ -132,6 +106,20 @@ class _LearnPageState extends State<LearnPage> {
           ],
         )
       ]),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class TestPage extends StatelessWidget {
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+
+  TestPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(children: []),
     );
   }
 }
