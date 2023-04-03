@@ -49,3 +49,15 @@ List<String> caractere = [
   '@',
   '='
 ];
+
+var hashMap = ({
+  ':': 'deux_point',
+  '!': 'exclamation',
+  '?': 'interrogation',
+  ';': 'point_virgule',
+  '.': 'point',
+  '/': 'slash',
+  '=': 'égale',
+  '"': 'guillemet',
+  '()': 'paranthèse'
+});

@@ -32,5 +32,8 @@ def update():
             current_braille[7] = 0
         case "space":
             print("\n" + str(current_braille))
+            for x in range(6):
+                current_braille[x] = 0
+
         case default:
             print(default)
