@@ -1,14 +1,18 @@
 // @dart=3
 import 'dart:collection';
-
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
 import 'package:application_blind_viewer/variable.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'dart:convert';
+import 'package:tcp_socket_connection/tcp_socket_connection.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -94,6 +98,7 @@ class LearnPage extends StatefulWidget {
 
 class _LearnPageState extends State<LearnPage> {
   String randomChar = getRandomChar();
+  String message = '';
 
   void playSound(String letter) async {
     AudioPlayer player = AudioPlayer();
@@ -107,10 +112,23 @@ class _LearnPageState extends State<LearnPage> {
     int result = await player.playBytes(soundbytes);
   }
 
+  Future<http.Response> SendLetter(String title) {
+    return http.post(
+      Uri.http('192.168.1.66:3000', '/Learn'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'letter': title,
+      }),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     playSound(randomChar.toUpperCase());
+    SendLetter(randomChar);
   }
 
   @override
@@ -129,6 +147,7 @@ class _LearnPageState extends State<LearnPage> {
                   setState(() {
                     randomChar = getRandomChar();
                     playSound(randomChar.toUpperCase());
+                    SendLetter(randomChar);
                   });
                 },
                 child: Text('Appuyez pour changer la lettre'))
@@ -148,28 +167,16 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  void Scan() async {
-    // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 4));
-
-// Listen to scan results
-    var subscription = flutterBlue.scanResults.listen((results) {
-      // do something with scan results
-      for (ScanResult r in results) {
-        print('${r.device.id} found! rssi: ${r.rssi}');
-      }
-    });
-
-// Stop scanning
-    flutterBlue.stopScan();
-  }
-
   @override
   void initState() {
     super.initState();
     playSound();
+  }
+
+  void connect() async {
+    Socket socket = await Socket.connect('172.16.18.32', 39576);
+    print('connected');
+    socket.add(utf8.encode('hello'));
   }
 
   void playSound() async {
@@ -184,8 +191,9 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-          children: [ElevatedButton(onPressed: Scan, child: Text('Chercher'))]),
+      body: Column(children: [
+        ElevatedButton(onPressed: connect, child: Text('Chercher'))
+      ]),
     );
   }
 }
