@@ -11,9 +11,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tess
 #camera.capture('test.webp')
 #camera.stop_preview()
 
-if(os.path.exists('test.webp')):
-    path = r'test.webp'
-else:
-    path = r'extract_text/test.webp'
+path = r'../extract_text/test.webp' #path anormale car quand node js lance le fichier, python prend comme chemin actuel le chemin de server.js
 
 text = pytesseract.image_to_string(path)
+print(text)

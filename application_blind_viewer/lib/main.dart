@@ -174,7 +174,7 @@ class _TestPageState extends State<TestPage> {
   }
 
   void connect() async {
-    Socket socket = await Socket.connect('172.16.18.32', 39576);
+    Socket socket = await Socket.connect('192.168.242.213', 39576);
     print('connected');
     socket.add(utf8.encode('hello'));
   }
