@@ -2,7 +2,7 @@ import text_to_braille
 import keyboard
 import time
 import KeyInput
-from text_manipulation import text
+#from text_manipulation import text
 
 
 def update():

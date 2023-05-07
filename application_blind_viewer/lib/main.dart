@@ -14,6 +14,8 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+String serverURL = '192.168.1.66';
+
 void main() {
   runApp(MyApp());
 }
@@ -21,6 +23,18 @@ void main() {
 String getRandomChar() {
   int random = Random().nextInt(caractere.length);
   return caractere[random];
+}
+
+void playSound(String letter) async {
+  AudioPlayer player = AudioPlayer();
+  if (hashMap.containsKey(letter)) {
+    letter = hashMap[letter].toString();
+  }
+  String audioasset = "assets/${letter}.ogg";
+  ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
+  Uint8List soundbytes =
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+  int result = await player.playBytes(soundbytes);
 }
 
 class MyApp extends StatelessWidget {
@@ -100,21 +114,9 @@ class _LearnPageState extends State<LearnPage> {
   String randomChar = getRandomChar();
   String message = '';
 
-  void playSound(String letter) async {
-    AudioPlayer player = AudioPlayer();
-    if (hashMap.containsKey(letter)) {
-      letter = hashMap[letter].toString();
-    }
-    String audioasset = "assets/${letter}.ogg";
-    ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
-    Uint8List soundbytes =
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    int result = await player.playBytes(soundbytes);
-  }
-
   Future<http.Response> SendLetter(String title) {
     return http.post(
-      Uri.http('192.168.1.66:3000', '/Learn'),
+      Uri.http('${serverURL}:3000', '/Learn'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -167,33 +169,30 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  void waitPressedKey() async {
+    var response =
+        await http.get(Uri.parse('http://${serverURL}:3000/waitPressedKey'));
+    print(jsonDecode(response.body));
+  }
+
+  void testPassed() {
+    setState(() {
+      String randomChar = getRandomChar();
+    });
+  }
+
+  String randomChar = getRandomChar();
+  String message = '';
   @override
   void initState() {
     super.initState();
-    playSound();
-  }
-
-  void connect() async {
-    Socket socket = await Socket.connect('192.168.242.213', 39576);
-    print('connected');
-    socket.add(utf8.encode('hello'));
-  }
-
-  void playSound() async {
-    AudioPlayer player = AudioPlayer();
-    String audioasset = "assets/A.ogg";
-    ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
-    Uint8List soundbytes =
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    int result = await player.playBytes(soundbytes);
+    playSound(randomChar);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        ElevatedButton(onPressed: connect, child: Text('Chercher'))
-      ]),
+      body: Center(child: Text(randomChar)),
     );
   }
 }
